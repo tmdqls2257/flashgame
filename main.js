@@ -2,14 +2,18 @@
 
 const StartBtn = document.querySelector('.Timer__start');
 const stopBtn = document.querySelector('Timer__stop');
-const itemContainer = document.querySelector('.space');
+const itemContainer = document.querySelector('.field');
 
 let id =0;
 
 function createItem(){
   for (let i=0; i<6; i++) {
-    itemContainer.innerHTML +=`<img class="space__bug" src="img/bug.png" alt="space__bug" data-id=${id}>
-    <img class="space__carrot" src="img/carrot.png" alt="space__carrot" data-id=${id}>`;
+    itemContainer.innerHTML +=`<div class="space">
+    <img class="space__bug" src="img/bug.png" alt="space__bug" data-id=${id}>
+  </div>
+  <div class="space">
+    <img class="space__carrot" src="img/carrot.png" alt="space__carrot" data-id=${id}>
+  </div>`;
     id++;
   }
 }
@@ -54,5 +58,5 @@ StartBtn.addEventListener('click', ()=>{
 });
 
 stopBtn.addEventListener('click', ()=>{
-  window.clearTimeout(lastTime());
+
 });

@@ -1,29 +1,102 @@
 @import 'reset.css';
 
+:root {
+  --font-medieumsize: 24px;
+  --font-largesize: 32px;
+}
+* {
+  box-sizing: border-box;
+}
+button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
 body {
-  background: no-repeat url('img/background.png');
-  background-size: 100% 100%;
+  text-align: center;
 }
-.Timer {
-  position: absolute;
-  top: 0;
-  left: 50%;
+.game {
+  display: flex;
+  flex-direction: column;
+  width: 800px;
+  height: 500px;
+  margin: auto;
+  background: url('img/background.png') center/cover;
 }
-.field {
-  position: absolute;
-  bottom: 0;
+.game__header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.game__button {
+  width: 60px;
+  height: 60px;
+  font-size: var(--font-medieumsize);
+  background-color: bisque;
+  border-radius: 10px;
+  border: 1px solid;
+}
+
+i {
+  transition: all 500ms ease;
+}
+
+.game__button i:hover {
+  transform: scale(1.5);
+  color: orange;
+}
+.game__timer {
+  margin: 10px 0;
+  width: 100px;
+  font-size: var(--font-largesize);
+  border-radius: 10px;
+  text-align: center;
+  border: 5px solid;
+  background-color: white;
+}
+.game__score {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  border: 1px solid;
+  align-items: center;
+  font-size: var(--font-medieumsize);
+  background-color: tomato;
+}
+
+.game__field {
   width: 100%;
-  height: 50%;
+  height: 100%;
+  margin-top: 70px;
 }
-.space {
-  width: 90%;
-  height: 90%;
+.pop-up {
+  width: 400px;
+  height: 120px;
+  padding: 20px;
+  background-color: #00000090;
+  color: white;
+  text-align: center;
+  margin: auto;
+  transform: translateY(-150%);
 }
-.space__bug {
-  position: absolute;
-  transform: translate(100px, 50px);
+
+.pop-up--hide {
+  display: none;
 }
-.space__carrot {
-  position: absolute;
-  transform: translate(100px, 50px);
+
+.pop-up__refresh {
+  width: 60px;
+  height: 60px;
+  font-size: var(--font-medieumsize);
+  background-color: wheat;
+  border: 2px solid;
+  border-radius: 50%;
+}
+.pop-up__message {
+  display: block;
+  font-size: var(--font-medieumsize);
 }
