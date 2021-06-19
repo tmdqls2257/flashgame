@@ -13,6 +13,12 @@ const popUp = document.querySelector('.pop-up--hide');
 const popUpText = popUp.querySelector('.pop-up__message');
 const popUpRefresh = popUp.querySelector('.pop-up__refresh');
 
+const carrotSound = new Audio('sound/carrot_pull.mp3');
+const bugSound = new Audio('sound/bug_pull.mp3');
+const alertSound = new Audio('sound/alert.wav');
+const bgSound = new Audio('sound/bg.mp3');
+const winSound = new Audio('sound/game_win.mp3');
+
 const icon = start.querySelector('.fa-play');
 let carrotScore = 0;
 let started = false; //게임의 상태를 기억하는 변수 설정
@@ -46,6 +52,7 @@ function stopGame(){
   started = false;
   stopGameTimer();
   hideGameButton();
+  playSound(alertSound);
   showPopUp('Replay?');
 }
 
@@ -86,6 +93,7 @@ function onFieldClick(event){
   }
   const target = event.target;
   if (target.matches('.carrot')){
+    playSound(carrotSound);
     target.remove();
     carrotScore++;
     updateScore();
@@ -93,14 +101,23 @@ function onFieldClick(event){
       finishGame(true);
     }
   }else if(target.matches('.bug')){
-    stopGameTimer();
     finishGame(false);
   }
 }
 
+function playSound(sound){
+  sound.play();
+}
+
 function finishGame(win){
   started = false;
+  if(win){
+    playSound(winSound);
+  }else{
+    playSound(bugSound);
+  }
   hideGameButton();
+  stopGameTimer();
   showPopUp(win? "You Win" : "You Lost");
 }
 
