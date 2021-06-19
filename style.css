@@ -55,6 +55,7 @@ i {
   text-align: center;
   border: 5px solid;
   background-color: white;
+  visibility: hidden;
 }
 .game__score {
   width: 50px;
@@ -66,6 +67,7 @@ i {
   align-items: center;
   font-size: var(--font-medieumsize);
   background-color: tomato;
+  visibility: hidden;
 }
 
 .game__field {
