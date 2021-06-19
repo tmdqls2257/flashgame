@@ -14,26 +14,36 @@ const popUpText = popUp.querySelector('.pop-up__message');
 const popUpRefresh = popUp.querySelector('.pop-up__refresh');
 
 const icon = start.querySelector('.fa-play');
-
+let carrotScore = 0;
 let started = false; //게임의 상태를 기억하는 변수 설정
 let timerId = undefined;
+
+field.addEventListener('click', onFieldClick);
 
 start.addEventListener('click', () => {
   if(started){
     stopGame();
   }else{
     startGame();
-  }
-  started = !started;//started가 false이면 true를 입력해주는 기능
+  }//started가 false이면 true를 입력해주는 기능
+});
+
+popUpRefresh.addEventListener('click', () => {
+  startGame();
+  popUp.style.display = 'none';
+  start.style.visibility = 'visible';
+  carrotScore = 0;
 });
 
 function startGame(){
+  started = true;
   init();
   showTimerAndScore();
   showStopBtn();
 }
 
 function stopGame(){ 
+  started = false;
   stopGameTimer();
   hideGameButton();
   showPopUp('Replay?');
@@ -55,7 +65,7 @@ function hideGameButton(){
 }
 
 function showPopUp(text){
-  popUp.style.innerText = text;
+  popUpText.innerText = text;
   popUp.style.display = 'block';
 }
 
@@ -68,6 +78,34 @@ function init(){
 
 function currentScore(num){
   score.innerHTML = `${num}`;
+}
+
+function onFieldClick(event){
+  if(!started){
+    return;
+  }
+  const target = event.target;
+  if (target.matches('.carrot')){
+    target.remove();
+    carrotScore++;
+    updateScore();
+    if(score === CARROT_COUNT){
+      finishGame(true);
+    }
+  }else if(target.matches('.bug')){
+    stopGameTimer();
+    finishGame(false);
+  }
+}
+
+function finishGame(win){
+  started = false;
+  hideGameButton();
+  showPopUp(win? "You Win" : "You Lost");
+}
+
+function updateScore(){
+  score.innerText = CARROT_COUNT - carrotScore;
 }
 
 function addItem(className, imgPath, count){
@@ -93,6 +131,7 @@ function printNumbers(from) {
   timerId = setInterval(function() {
     if (from == 0) {
       clearInterval(timerId);
+      finishGame(CARROT_COUNT === carrotScore);
       return;
     }
     updateTimer(--from);
@@ -101,11 +140,11 @@ function printNumbers(from) {
 
 function stopGameTimer(){
   clearInterval(timerId);
-  timer.innerHTML = '00:00';
+  timer.innerText = '00:00';
 }
 
 function updateTimer(time){
   const minutes = Math.floor(time / 60);
   const sec = Math.floor(time % 60);
-  timer.innerHTML = `${minutes < 10 ? `0${minutes}` : minutes}:${sec < 10 ? `0${sec}` : sec}`;
+  timer.innerText = `${minutes < 10 ? `0${minutes}` : minutes}:${sec < 10 ? `0${sec}` : sec}`;
 }
