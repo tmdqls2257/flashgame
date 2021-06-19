@@ -1,6 +1,7 @@
 'use strict';
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
+const GAME_SEC = 5;
 
 const field = document.querySelector('.game__field');
 const fieldRect = field.getBoundingClientRect();
@@ -8,9 +9,14 @@ const start = document.querySelector('.game__button');
 const timer = document.querySelector('.game__timer');
 const score = document.querySelector('.game__score');
 
+const popUp = document.querySelector('.pop-up--hide');
+const popUpText = popUp.querySelector('.pop-up__message');
+const popUpRefresh = popUp.querySelector('.pop-up__refresh');
+
+const icon = start.querySelector('.fa-play');
+
 let started = false; //게임의 상태를 기억하는 변수 설정
-let Cscore = 0;
-let ctimer = undefined;
+let timerId = undefined;
 
 start.addEventListener('click', () => {
   if(started){
@@ -28,20 +34,29 @@ function startGame(){
 }
 
 function stopGame(){ 
-
+  stopGameTimer();
+  hideGameButton();
+  showPopUp('Replay?');
 }
 
 function showTimerAndScore(){
   timer.style.visibility = 'visible';
   score.style.visibility = 'visible';
-  printNumbers(10, 0);
+  printNumbers(GAME_SEC);
 }
 
 function showStopBtn(){
-  const icon = start.querySelector('.fa-play');
   icon.classList.add('fa-stop');
   icon.classList.remove('fa-play');
+}
 
+function hideGameButton(){
+  start.style.visibility = 'hidden';
+}
+
+function showPopUp(text){
+  popUp.style.innerText = text;
+  popUp.style.display = 'block';
 }
 
 function init(){
@@ -68,17 +83,29 @@ for(let i = 0; i < count; i++){
   items.style.top = `${y}px`;
 }
 }
+
 function randomNumber(max){
   return Math.floor(Math.random() * max);
 }
-function printNumbers(from, to) {
-  let current = from;
 
-  let timerId = setInterval(function() {
-    timer.innerHTML = `${current < 10 ? `0${current}` : current}:00`;
-    if (current == to) {
+function printNumbers(from) {
+  updateTimer(from);
+  timerId = setInterval(function() {
+    if (from == 0) {
       clearInterval(timerId);
+      return;
     }
-    current--;
+    updateTimer(--from);
   }, 1000);
+}
+
+function stopGameTimer(){
+  clearInterval(timerId);
+  timer.innerHTML = '00:00';
+}
+
+function updateTimer(time){
+  const minutes = Math.floor(time / 60);
+  const sec = Math.floor(time % 60);
+  timer.innerHTML = `${minutes < 10 ? `0${minutes}` : minutes}:${sec < 10 ? `0${sec}` : sec}`;
 }
