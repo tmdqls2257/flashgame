@@ -1,17 +1,21 @@
 'use strict';
+
+import popup from './popup.js';
+
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
 const GAME_SEC = 5;
+
+const gameFinishBanner = new popup();
+gameFinishBanner.setClickListen(() => {
+  startGame();
+});
 
 const field = document.querySelector('.game__field');
 const fieldRect = field.getBoundingClientRect();
 const start = document.querySelector('.game__button');
 const timer = document.querySelector('.game__timer');
 const score = document.querySelector('.game__score');
-
-const popUp = document.querySelector('.pop-up--hide');
-const popUpText = popUp.querySelector('.pop-up__message');
-const popUpRefresh = popUp.querySelector('.pop-up__refresh');
 
 const carrotSound = new Audio('sound/carrot_pull.mp3');
 const bugSound = new Audio('sound/bug_pull.mp3');
@@ -34,13 +38,6 @@ start.addEventListener('click', () => {
   }//started가 false이면 true를 입력해주는 기능
 });
 
-popUpRefresh.addEventListener('click', () => {
-  startGame();
-  popUp.style.display = 'none';
-  start.style.visibility = 'visible';
-  carrotScore = 0;
-});
-
 function startGame(){
   started = true;
   init();
@@ -51,9 +48,9 @@ function startGame(){
 function stopGame(){ 
   started = false;
   stopGameTimer();
-  hideGameButton();
+  gameFinishBanner.hide();
   playSound(alertSound);
-  showPopUp('Replay?');
+  gameFinishBanner.showwithText('Replay?');
 }
 
 function showTimerAndScore(){
@@ -65,15 +62,6 @@ function showTimerAndScore(){
 function showStopBtn(){
   icon.classList.add('fa-stop');
   icon.classList.remove('fa-play');
-}
-
-function hideGameButton(){
-  start.style.visibility = 'hidden';
-}
-
-function showPopUp(text){
-  popUpText.innerText = text;
-  popUp.style.display = 'block';
 }
 
 function init(){
@@ -116,9 +104,9 @@ function finishGame(win){
   }else{
     playSound(bugSound);
   }
-  hideGameButton();
+  gameFinishBanner.hide();
   stopGameTimer();
-  showPopUp(win? "You Win" : "You Lost");
+  gameFinishBanner.showwithText(win? "You Win" : "You Lost");
 }
 
 function updateScore(){

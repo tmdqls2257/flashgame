@@ -4,17 +4,21 @@
   --font-medieumsize: 24px;
   --font-largesize: 32px;
 }
+
 * {
   box-sizing: border-box;
 }
+
 button {
   border: none;
   outline: none;
   cursor: pointer;
 }
+
 body {
   text-align: center;
 }
+
 .game {
   display: flex;
   flex-direction: column;
@@ -23,6 +27,7 @@ body {
   margin: auto;
   background: url('img/background.png') center/cover;
 }
+
 .game__header {
   display: flex;
   flex-direction: column;
