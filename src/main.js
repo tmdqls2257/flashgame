@@ -2,6 +2,7 @@
 
 import popup from './popup.js';
 import Field from './field.js';
+import * as Sound from './sound.js';
 
 const CARROT_COUNT = 5;
 const BUG_COUNT = 5;
@@ -23,7 +24,7 @@ function onItemClick(item){
     carrotScore++;
     updateScore();
     if(score === CARROT_COUNT){
-      finishGame(true);
+      finishGame(true);x
     }
   }else if(item === 'bug'){
     finishGame(false);
@@ -33,12 +34,6 @@ function onItemClick(item){
 const start = document.querySelector('.game__button');
 const timer = document.querySelector('.game__timer');
 const score = document.querySelector('.game__score');
-
-const carrotSound = new Audio('sound/carrot_pull.mp3');
-const bugSound = new Audio('sound/bug_pull.mp3');
-const alertSound = new Audio('sound/alert.wav');
-const bgSound = new Audio('sound/bg.mp3');
-const winSound = new Audio('sound/game_win.mp3');
 
 const icon = start.querySelector('.fa-play');
 let carrotScore = 0;
@@ -58,13 +53,14 @@ function startGame(){
   init();
   showTimerAndScore();
   showStopBtn();
+  Sound.playBackground();
 }
 
 function stopGame(){ 
   started = false;
   stopGameTimer();
   gameFinishBanner.hide();
-  playSound(alertSound);
+  Sound.playAlert();
   gameFinishBanner.showwithText('Replay?');
 }
 
@@ -88,29 +84,21 @@ function currentScore(num){
   score.innerHTML = `${num}`;
 }
 
-
-function playSound(sound){
-  sound.play();
-}
-
 function finishGame(win){
   started = false;
   if(win){
-    playSound(winSound);
+    Sound.playWin();
   }else{
-    playSound(bugSound);
+    Sound.playBackground();
   }
   gameFinishBanner.hide();
   stopGameTimer();
+  Sound.stopBackground();
   gameFinishBanner.showwithText(win? "You Win" : "You Lost");
 }
 
 function updateScore(){
   score.innerText = CARROT_COUNT - carrotScore;
-}
-
-function randomNumber(max){
-  return Math.floor(Math.random() * max);
 }
 
 function printNumbers(from) {

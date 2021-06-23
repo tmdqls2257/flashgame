@@ -35,7 +35,7 @@ export default class Field{
     this.addItem('bug', 'img/bug.png', this.bugCount);
   }
 
-  onClick(event){
+  onClick = (event) =>{
     const target = event.target;
     if (target.matches('.carrot')){
       playSound(carrotSound);
