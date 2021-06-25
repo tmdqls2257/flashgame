@@ -3,7 +3,37 @@
 import Field from './field.js';
 import * as Sound from './sound.js';
 
-export default class Game{
+export const Reason = Object.freeze({
+win: 'win',
+lose: 'lose',
+cancel: 'cancel',
+});
+
+export default class GameBuilder{
+  gameDuration(duration){
+    this.gameDuration = duration;
+    return this; //클래스 자체를 리턴
+  }
+
+  carrotCount(num){
+    this.carrotCount = num;
+    return this;
+  }
+
+  bugCount(num){
+    this.bugCount = num;
+    return this;
+  }
+  bulid(){
+    return new Game(
+      this.carrotCount,
+      this.bugCount,
+      this.gameDuration
+    );
+  }
+}
+
+class Game{
   constructor(carrotCount, bugCount, duration){
     this.carrotCount = carrotCount;
     this.bugCount = bugCount;
@@ -97,7 +127,7 @@ export default class Game{
     this.hideGameHeader();
     this.stopGameTimer();
     Sound.stopBackground();
-    this.onClick && this.onClick(win ? "win" : "lose");
+    this.onClick && this.onClick(win ? Reason.win : Reason.lose);
   }
   
   updateScore(){
