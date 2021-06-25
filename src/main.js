@@ -1,7 +1,7 @@
 'use strict';
 
 import popup from './popup.js';
-import GameBuilder from './game.js';
+import {GameBuilder, Reason } from './game.js';
 
 const gameFunction = new GameBuilder()
 .carrotCount(3)

@@ -9,7 +9,7 @@ lose: 'lose',
 cancel: 'cancel',
 });
 
-export default class GameBuilder{
+export class GameBuilder{
   gameDuration(duration){
     this.gameDuration = duration;
     return this; //클래스 자체를 리턴
@@ -52,7 +52,7 @@ class Game{
 
     this.start.addEventListener('click', () => {
       if(this.started){
-        this.stopGame();
+        this.finishGame(Reason.cancel);
       }else{
         this.startGame();
       }//started가 false이면 true를 입력해주는 기능
@@ -71,10 +71,10 @@ class Game{
       this.carrotScore++;
       this.updateScore();
       if(this.score === this.carrotCount){
-        this.finishGame(true);
+        this.finishGame(Reason.win);
       }
     }else if(item === 'bug'){
-      this.finishGame(false);
+      this.finishGame(Reason.lose);
     }
   }
 
@@ -85,13 +85,26 @@ class Game{
     this.showStopBtn();
     Sound.playBackground();
   }
-  
-  stopGame(){ 
+
+  finishGame(reason){
     this.started = false;
+    switch(reason){
+      case Reason.win:
+        Sound.playWin();
+        this.onClick && this.onClick(Reason.win);
+        break;
+      case Reason.lose:
+        Sound.playBug();
+        this.onClick && this.onClick(Reason.lose);
+        break;
+      case Reason.cancel:
+      Sound.playAlert();
+        this.onClick && this.onClick(Reason.cancel);
+        break;
+      }
+    this.hideGameHeader();
     this.stopGameTimer();
     Sound.stopBackground();
-    Sound.playAlert();
-    this.onClick && this.onClick('cancel');
   }
   
   showTimerAndScore(){
@@ -116,19 +129,6 @@ class Game{
     this.score.innerHTML = `${num}`;
   }
   
-  finishGame(win){
-    this.started = false;
-    if(win){
-      Sound.playWin();
-    }else{
-      Sound.playBackground();
-      Sound.playAlert();
-    }
-    this.hideGameHeader();
-    this.stopGameTimer();
-    Sound.stopBackground();
-    this.onClick && this.onClick(win ? Reason.win : Reason.lose);
-  }
   
   updateScore(){
     this.score.innerText = this.carrotCount - this.carrotScore;
@@ -139,7 +139,7 @@ class Game{
     this.timerId = setInterval(() => {
       if (from == 0) {
         clearInterval(this.timerId);
-        this.finishGame(this.carrotCount === this.carrotScore);
+        this.finishGame(this.carrotCount === this.carrotScore ? Reason.win : Reason.lose);
         return;
       }
       this.updateTimer(--from);
